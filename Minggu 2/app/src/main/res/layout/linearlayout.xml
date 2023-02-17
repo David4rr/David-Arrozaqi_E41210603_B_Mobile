@@ -7,7 +7,7 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:orientation="vertical"
-    tools:context=".LinierLayout">
+    tools:context=".LinearLayout">
     <EditText
         android:id="@+id/to"
         android:layout_width="match_parent"

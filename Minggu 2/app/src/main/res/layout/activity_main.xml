@@ -11,6 +11,7 @@
         android:layout_height="match_parent">
         <Button
             android:id="@+id/btn1"
+            android:onClick="linear"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@drawable/round_button"
@@ -22,6 +23,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
         <Button
             android:id="@+id/btn2"
+            android:onClick="Relative"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@drawable/round_button"
@@ -33,6 +35,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
         <Button
             android:id="@+id/btn3"
+            android:onClick="Constraint"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@drawable/round_button"
@@ -44,6 +47,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
         <Button
             android:id="@+id/btn4"
+            android:onClick="Frame"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@drawable/round_button"
@@ -55,6 +59,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
         <Button
             android:id="@+id/btn5"
+            android:onClick="Table"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@drawable/round_button"
@@ -66,47 +71,181 @@
             app:layout_constraintTop_toTopOf="parent"/>
         <Button
             android:id="@+id/btn6"
+            android:onClick="Material"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@drawable/round_button"
             android:text="6"
             android:textColor="#fff"
+            app:layout_constraintStart_toEndOf="@id/btn5"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
+
         <Button
             android:id="@+id/btn7"
+            android:onClick="ScrollV"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@drawable/round_button"
-            android:text="1"
+            android:text="7"
             android:textColor="#fff"
+            app:layout_constraintTop_toBottomOf="@+id/btn4"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintEnd_toStartOf="@id/btn8"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <Button
             android:id="@+id/btn8"
+            android:onClick="ScrollVH"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@drawable/round_button"
-            android:text="1"
+            android:text="8"
             android:textColor="#fff"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-        <Button
-            android:id="@+id/btn9"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/round_button"
-            android:text="1"
-            android:textColor="#fff"
+            app:layout_constraintTop_toBottomOf="@id/btn5" />
+
+        <TextView
+            android:id="@+id/LinearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Linear Layout"
+            tools:ignore="MissingConstraints"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginBottom="290dp"
+            android:textSize="16dp"
+            android:textColor="#fff"/>
+        <TextView
+            android:id="@+id/RelativeLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Relative Layout"
+            tools:ignore="MissingConstraints"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn4"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginBottom="290dp"
+            android:layout_marginRight="130dp"
+            android:textSize="16dp"
+            android:textColor="#fff"/>
+        <TextView
+            android:id="@+id/ConstraintLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Constraint Layout"
+            tools:ignore="MissingConstraints"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn5"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginBottom="290dp"
+            android:textSize="16dp"
+            android:textColor="#fff"/>
+
+        <TextView
+            android:id="@+id/FrameLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="115dp"
+            android:text="Frame Layout"
+            android:textColor="#fff"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.501"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/TableLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="115dp"
+            android:layout_marginRight="130dp"
+            android:text="Table Layout"
+            android:textColor="#fff"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.846"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn2"
+            app:layout_constraintVertical_bias="0.339"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/MaterialLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="115dp"
+            android:layout_marginEnd="35dp"
+            android:text="Material Layout"
+            android:textColor="#fff"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@id/btn8"
+            app:layout_constraintTop_toTopOf="@id/btn3"
+            app:layout_constraintVertical_bias="0.339"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/ScrollViewLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="522dp"
+            android:text="Scroll View"
+            android:textColor="#fff"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn8"
+            app:layout_constraintHorizontal_bias="0.504"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.438"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/ScrollViewHorizontalLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="522dp"
+            android:layout_marginRight="120dp"
+            android:text="Scroll View"
+            android:textColor="#fff"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.529"
+            app:layout_constraintStart_toEndOf="@id/btn7"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.438"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/ScrollViewHorizontalLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="562dp"
+            android:layout_marginEnd="168dp"
+            android:text="Horizontal"
+            android:textColor="#fff"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@id/btn8"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.435"
+            tools:ignore="MissingConstraints" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
