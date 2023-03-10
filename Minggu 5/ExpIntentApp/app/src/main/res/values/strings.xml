@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">ExpIntentApp</string>
+    <string name="who_are_you">Kamu Siapa?</string>
+    <string name="i_am">Saya</string>
+    <string name="this_is_second_activity">Ini aktivitas kedua</string>
+</resources>
