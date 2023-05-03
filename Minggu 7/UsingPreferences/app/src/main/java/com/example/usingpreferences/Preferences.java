@@ -6,14 +6,19 @@ import android.preference.PreferenceManager;
 
 public class Preferences {
 
+    // Pendeklarasian key-data berupa String, sebagai wadah penyimpanan data.
+    // Jadi setiap data mempunyai key yang berbeda satu sama lain
     static final String KEY_USER_TEREGISTER = "user", KEY_PASS_TEREGISTER = "pass";
     static final String KEY_USERNAME_SEDANG_LOGIN = "Username_logged_in";
     static final String KEY_STATUS_SEDANG_LOGIN = "Status_logged_in";
 
+   // Pendeklarasian Shared Preferences yang berdasarkan parameter context
     private static SharedPreferences getSharedPreferences(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
+    // Pendeklarasian Edit Preferences dan mengubah data
+    // yang memiliki key isi KEY_USER_TEREGISTER dengan parameter username
     public static void setRegisteredUser(Context context, String username){
         SharedPreferences.Editor editor = getSharedPreferences(context).edit();
         editor.putString(KEY_USER_TEREGISTER, username);
