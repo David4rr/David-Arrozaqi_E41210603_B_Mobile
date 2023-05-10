@@ -33,7 +33,7 @@ public class MahasiswaAdapter extends RecyclerView.Adapter<MahasiswaAdapter.Maha
     @Override
     public int getItemCount() {
         return (dataList != null) ? dataList.size() : 0;
-    }
+    }   
 
     public class MahasiswaViewHolder extends RecyclerView.ViewHolder {
         private TextView txtNama, txtNpm, txtNohp;

@@ -1,161 +1,137 @@
 package com.example.cobapeta;
 
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-import androidx.core.app.ActivityCompat;
-
-import android.location.LocationProvider;
-import android.os.Bundle;
-import android.content.Context;
+import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
+import android.os.Bundle;
 import android.widget.Toast;
-import android.Manifest;
-import android.app.PendingIntent;
-import android.content.Intent;
-import android.net.Uri;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
+
+import com.example.cobapeta.databinding.ActivityMapsBinding;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.example.cobapeta.databinding.ActivityMapsBinding;
-
-
-import java.util.List;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+//    final private int REQUEST_COURSE_ACCESS = 123;
+//    LocationManager lm;
+//    boolean permissionGranted;
+//    LocationListener locationListener;
 
-    final private int REQUEST_COURSE_ACCESS = 123;
-    boolean permissionGranted = false;
     private GoogleMap mMap;
-    LocationManager lm;
-    LocationListener locationListener;
     private ActivityMapsBinding binding;
+
+    private FusedLocationProviderClient fusedLocationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new MyLocationListener();
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+
+//        lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//        locationListener = new MyLocationListener();
     }
 
-    @Override
-    protected void onPause(){
-        super.onPause();
-        if (ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    REQUEST_COURSE_ACCESS);
+
+    public boolean isZoomControlsEnabled() {
+        return true;
+    }
+
+    public void getMyLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
-        } else {
-            permissionGranted = true;
-        } if(permissionGranted) {
-            lm.removeUpdates(locationListener);
         }
+
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18)); // Menggerakkan kamera ke titik yang diklik
+                            MarkerOptions mo = new MarkerOptions();
+                            mo.position(latLng);
+                            mo.title("You're Here");
+                            mMap.addMarker(mo);
+                            String latitude = String.valueOf(latLng.latitude);
+                            String longitude = String.valueOf(latLng.longitude);
+                            Toast.makeText(MapsActivity.this, "Latitude: " + latitude + ", Longitude: " + longitude, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new MyLocationListener();
 
-        if (ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION},
-                    REQUEST_COURSE_ACCESS);
-            return;
+        // Cek apakah izin lokasi sudah diberikan atau belum
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true); // Mengaktifkan layer lokasi
         } else {
-            permissionGranted = true;
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1); // Meminta izin lokasi
         }
-        if (permissionGranted) {
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                    0, 0, locationListener);
-//            lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//            locationListener = new MyLocationListener();
-        }
+
+        getMyLocation();
+
+        mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+
+            @Override
+            public boolean onMyLocationButtonClick() {
+                mMap.clear();
+                getMyLocation();
+                return false;
+            }
+        });
+
+        // Menambahkan listener pada map ketika diklik
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                mMap.clear(); // Menghapus marker sebelumnya
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17)); // Menggerakkan kamera ke titik yang diklik
+                MarkerOptions mo = new MarkerOptions();
+                mo.position(latLng);
+                mo.title(latLng.latitude + " : " + latLng.longitude);
+                mMap.addMarker(mo);
+                String latitude = String.valueOf(latLng.latitude);
+                String longitude = String.valueOf(latLng.longitude);
+                Toast.makeText(MapsActivity.this, "Latitude: " + latitude + ", Longitude: " + longitude, Toast.LENGTH_SHORT).show(); // Menampilkan toast dengan koordinat yang diklik
+            }
+        });
     }
+
+
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                          int[] grandResult){
-        switch (requestCode){
-            case REQUEST_COURSE_ACCESS:
-                if (grandResult[0] == PackageManager.PERMISSION_GRANTED){
-                    permissionGranted = true;
-                } else {
-                    permissionGranted = false;
-                } break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions,
-                        grandResult);
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            mMap.setMyLocationEnabled(true);
+            getMyLocation();
         }
     }
-
-    private class MyLocationListener implements LocationListener {
-        @Override
-        public void onLocationChanged(Location location){
-            if(location != null){
-                Toast.makeText(getBaseContext(), "Location changed : Lat: " +
-                        location.getLatitude() + "\nLng: "
-                        + location.getLongitude(), Toast.LENGTH_SHORT).show();
-                LatLng p = new LatLng((int) (location.getLatitude()),
-                        (int) (location.getLongitude()));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(p));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(7));
-            }
-        }
-
-        @Override
-        public void onProviderDisabled(String provider){
-            Toast.makeText(getBaseContext(), provider + " Disabled",
-                    Toast.LENGTH_SHORT).show();
-        }
-        @Override
-        public void onProviderEnabled(String provider){
-            Toast.makeText(getBaseContext(), provider + " Enabled",
-                    Toast.LENGTH_SHORT).show();
-        }
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras){
-            String statusString = "";
-            switch (status){
-                case LocationProvider.AVAILABLE:
-                    statusString = "Available";
-                case LocationProvider.OUT_OF_SERVICE:
-                    statusString = "Out of Service";
-                case LocationProvider.TEMPORARILY_UNAVAILABLE:
-                    statusString = "Temporarily Unavailable";
-            }
-            Toast.makeText(getBaseContext(), provider + " " + statusString,
-                    Toast.LENGTH_SHORT).show();
-        }
-        }
 }
